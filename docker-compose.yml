@@ -11,20 +11,6 @@ networks:
     name: "${NEKO_ROOMS_TRAEFIK_NETWORK}"
 
 services:
-  traefik:
-    image: "traefik:2.4"
-    restart: "unless-stopped"
-    environment:
-      - "TZ"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
-      - "./traefik/usersfile:/usersfile:ro"
-      - "./traefik/acme.json:/acme.json"
-      - "./traefik/config:/config"
 
   neko-rooms:
     image: "m1k1o/neko-rooms:latest"
@@ -46,4 +32,3 @@ services:
       - "traefik.http.routers.neko-rooms.rule=Host(`${NEKO_ROOMS_TRAEFIK_DOMAIN}`)"
       - "traefik.http.routers.neko-rooms.tls=true"
       - "traefik.http.routers.neko-rooms.tls.certresolver=${NEKO_ROOMS_TRAEFIK_CERTRESOLVER}"
-      - "traefik.http.routers.neko-rooms.middlewares=basicauth@file"
